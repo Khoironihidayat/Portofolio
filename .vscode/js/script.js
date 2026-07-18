@@ -3,9 +3,9 @@ const themeToggle = document.getElementById("theme-toggle");
 const themeToggleMobile = document.getElementById("theme-toggle-mobile");
 const html = document.documentElement;
 
-// Check saved theme
+// Default to dark mode; only switch to light if user explicitly chose it
 const savedTheme = localStorage.getItem("theme");
-if (savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+if (savedTheme !== "light") {
   html.classList.add("dark");
 }
 
