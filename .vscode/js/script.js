@@ -1,5 +1,6 @@
 // ===== DARK MODE TOGGLE =====
 const themeToggle = document.getElementById("theme-toggle");
+const themeToggleMobile = document.getElementById("theme-toggle-mobile");
 const html = document.documentElement;
 
 // Check saved theme
@@ -8,11 +9,16 @@ if (savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-s
   html.classList.add("dark");
 }
 
-themeToggle.addEventListener("click", function () {
+function toggleTheme() {
   html.classList.toggle("dark");
   const isDark = html.classList.contains("dark");
   localStorage.setItem("theme", isDark ? "dark" : "light");
-});
+}
+
+themeToggle.addEventListener("click", toggleTheme);
+if (themeToggleMobile) {
+  themeToggleMobile.addEventListener("click", toggleTheme);
+}
 
 // ===== NAVBAR FIXED =====
 window.onscroll = function () {
@@ -114,6 +120,123 @@ function createParticles() {
 }
 
 createParticles();
+
+// ===== TECH ANIMATIONS =====
+function createTechAnimations() {
+  const layer = document.getElementById("techAnimLayer");
+  if (!layer) return;
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReducedMotion) return;
+
+  layer.innerHTML = "";
+
+  const isDark = html.classList.contains("dark");
+  const codeSnippets = ["</>", "<html>", "{css}", "[]", "//js", "npm", "git", "<div>", "React", "TS", "api", "0x0F", "func", "async", "let", "=>{}"];
+
+  // --- Geometric shapes (both modes) ---
+  const shapeTypes = ["circle", "square", "triangle", "line", "dot"];
+  for (let i = 0; i < 15; i++) {
+    const shape = document.createElement("div");
+    const type = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+    shape.className = `tech-shape tech-shape--${type}`;
+
+    const size = Math.random() * 20 + 8;
+    shape.style.left = Math.random() * 100 + "%";
+    shape.style.animationDuration = Math.random() * 20 + 15 + "s";
+    shape.style.animationDelay = Math.random() * 15 + "s";
+
+    if (type !== "triangle" && type !== "line") {
+      shape.style.width = size + "px";
+      shape.style.height = size + "px";
+    } else if (type === "line") {
+      shape.style.width = Math.random() * 60 + 30 + "px";
+    }
+
+    layer.appendChild(shape);
+  }
+
+  // --- Code snippets (both modes, different colors) ---
+  for (let i = 0; i < 10; i++) {
+    const code = document.createElement("div");
+    code.className = "tech-shape tech-shape--code";
+    code.textContent = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+    code.style.left = Math.random() * 100 + "%";
+    code.style.animationDuration = Math.random() * 25 + 20 + "s";
+    code.style.animationDelay = Math.random() * 15 + "s";
+    layer.appendChild(code);
+  }
+
+  // --- Dark mode: binary rain + circuit elements ---
+  if (isDark) {
+    // Binary rain columns
+    for (let i = 0; i < 8; i++) {
+      const col = document.createElement("div");
+      col.className = "tech-binary-col";
+      let text = "";
+      for (let j = 0; j < 40; j++) {
+        text += Math.random() > 0.5 ? "1" : "0";
+      }
+      col.textContent = text;
+      col.style.left = Math.random() * 100 + "%";
+      col.style.fontSize = Math.random() * 4 + 9 + "px";
+      col.style.animationDuration = Math.random() * 8 + 8 + "s";
+      col.style.animationDelay = Math.random() * 10 + "s";
+      col.style.color = Math.random() > 0.5 ? "#00f0ff" : "#b400ff";
+      layer.appendChild(col);
+    }
+
+    // Circuit lines
+    for (let i = 0; i < 6; i++) {
+      const line = document.createElement("div");
+      line.className = "tech-circuit-line";
+      line.style.width = Math.random() * 150 + 50 + "px";
+      line.style.top = Math.random() * 100 + "%";
+      line.style.left = Math.random() * 100 + "%";
+      line.style.animationDuration = Math.random() * 4 + 3 + "s";
+      line.style.animationDelay = Math.random() * 5 + "s";
+      line.style.transform = `rotate(${Math.random() * 180}deg)`;
+      layer.appendChild(line);
+    }
+
+    // Circuit nodes
+    for (let i = 0; i < 12; i++) {
+      const node = document.createElement("div");
+      node.className = "tech-circuit-node";
+      node.style.left = Math.random() * 100 + "%";
+      node.style.top = Math.random() * 100 + "%";
+      node.style.animationDuration = Math.random() * 3 + 2 + "s";
+      node.style.animationDelay = Math.random() * 4 + "s";
+      node.style.background = Math.random() > 0.5 ? "#00f0ff" : "#b400ff";
+      layer.appendChild(node);
+    }
+
+    // Hexagons
+    for (let i = 0; i < 4; i++) {
+      const hex = document.createElement("div");
+      hex.className = "tech-hex";
+      const hexSize = Math.random() * 30 + 20;
+      hex.style.width = hexSize + "px";
+      hex.style.height = hexSize + "px";
+      hex.style.left = Math.random() * 100 + "%";
+      hex.style.top = Math.random() * 100 + "%";
+      hex.style.animationDuration = Math.random() * 6 + 8 + "s";
+      hex.style.animationDelay = Math.random() * 5 + "s";
+      hex.innerHTML = `<svg viewBox="0 0 50 50" fill="none" stroke="currentColor" stroke-width="1"><polygon points="25,2 47,14 47,36 25,48 3,36 3,14"/></svg>`;
+      hex.style.color = Math.random() > 0.5 ? "#00f0ff" : "#b400ff";
+      layer.appendChild(hex);
+    }
+  }
+}
+
+// Create on load
+createTechAnimations();
+
+// Recreate on theme change
+const techObserver = new MutationObserver(() => {
+  createTechAnimations();
+});
+techObserver.observe(html, { attributes: true, attributeFilter: ["class"] });
 
 // ===== SMOOTH SCROLL FOR BOTTOM NAV =====
 document.querySelectorAll('.bottom-nav-item').forEach(item => {

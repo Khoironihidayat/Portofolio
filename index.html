@@ -11,6 +11,9 @@
     <!-- Particles Background -->
     <div class="particles" id="particles"></div>
 
+    <!-- Tech Animation Layer -->
+    <div class="tech-anim-layer" id="techAnimLayer"></div>
+
     <!-- Header Start -->
     <header class="bg-transparent absolute top-0 left-0 w-full flex items-center z-50">
       <div class="container">
@@ -22,7 +25,7 @@
           </div>
           <div class="flex items-center px-4 gap-4">
             <!-- Dark Mode Toggle -->
-            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode"></button>
+            <button id="theme-toggle" class="theme-toggle hidden lg:flex" aria-label="Toggle dark mode"></button>
 
             <button id="hamburger" name="hamburger" type="button" class="block absolute right-4 lg:hidden z-50">
               <span class="hamburger-line transition duration-300 ease-out origin-top-left"></span>
@@ -56,6 +59,12 @@
                   <a href="#contact" class="text-base text-dark dark:text-white py-2 mx-8 flex group-hover:text-neon-cyan transition-colors duration-300 font-medium">
                     <span class="text-neon-cyan mr-1 font-mono text-sm">05.</span> Contact
                   </a>
+                </li>
+                <li class="group lg:hidden">
+                  <div class="py-2 mx-8 flex items-center justify-between">
+                    <span class="text-base text-dark dark:text-white font-medium">Mode</span>
+                    <button id="theme-toggle-mobile" class="theme-toggle" aria-label="Toggle dark mode"></button>
+                  </div>
                 </li>
               </ul>
             </nav>
