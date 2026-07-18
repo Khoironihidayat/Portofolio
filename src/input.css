@@ -328,6 +328,21 @@ body.dark-mode {
   }
 }
 
+/* ===== GLOBAL RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
 /* ===== GLOW LINE DIVIDER ===== */
 .glow-divider {
   @apply w-full h-[1px] my-16;
@@ -1249,6 +1264,8 @@ body.dark-mode {
 }
 
 /* ===== RESPONSIVE ===== */
+
+/* Tablet (<=1024px) */
 @media (max-width: 1023px) {
   .card-scene {
     transform: scale(0.85);
@@ -1259,23 +1276,96 @@ body.dark-mode {
   }
 }
 
+/* Mobile (<=640px) */
 @media (max-width: 640px) {
   .card-scene {
-    transform: scale(0.78);
-    margin-top: 30px;
-  }
-  .id-card-wrapper {
-    min-height: 420px;
-  }
-}
-
-@media (max-width: 480px) {
-  .card-scene {
-    transform: scale(0.7);
+    transform: scale(0.72);
     margin-top: 20px;
   }
   .id-card-wrapper {
-    min-height: 380px;
+    min-height: 400px;
+  }
+}
+
+/* Small mobile (<=480px) */
+@media (max-width: 480px) {
+  .card-scene {
+    transform: scale(0.62);
+    margin-top: 10px;
+  }
+  .id-card-wrapper {
+    min-height: 350px;
+  }
+}
+
+/* Very small mobile (<=375px) */
+@media (max-width: 375px) {
+  .card-scene {
+    transform: scale(0.55);
+    margin-top: 0px;
+  }
+  .id-card-wrapper {
+    min-height: 310px;
+  }
+}
+
+/* Ultra small (<=320px) */
+@media (max-width: 320px) {
+  .card-scene {
+    transform: scale(0.48);
+    margin-top: -10px;
+  }
+  .id-card-wrapper {
+    min-height: 280px;
+  }
+}
+
+/* ===== GENERAL RESPONSIVE FIXES ===== */
+
+/* Mobile hero text */
+@media (max-width: 640px) {
+  .hero-text h1 {
+    font-size: 1.75rem;
+  }
+  .hero-text h1 .hero-name-big {
+    font-size: 2rem;
+  }
+  .hero-text h1 .hero-name-sub {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobile buttons - stack vertically */
+@media (max-width: 400px) {
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-buttons a {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Mobile portfolio grid */
+@media (max-width: 768px) {
+  .portfolio-card img {
+    aspect-ratio: 16/10;
+    object-fit: cover;
+  }
+}
+
+/* Mobile contact form */
+@media (max-width: 480px) {
+  .glass-card {
+    padding: 1.25rem;
+  }
+}
+
+/* Mobile header adjustments */
+@media (max-width: 640px) {
+  .tap-hint {
+    display: none;
   }
 }
 
