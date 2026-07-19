@@ -7,6 +7,15 @@
     <link href="src/output.css" rel="stylesheet" />
   </head>
   <body class="bg-surface-50 text-dark dark:bg-surface-900 dark:text-white tech-grid overflow-x-hidden">
+    <!-- SVG Noise Filter for card texture -->
+    <svg class="hidden" aria-hidden="true">
+      <defs>
+        <filter id="noiseFilter">
+          <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+          <feColorMatrix type="saturate" values="0"/>
+        </filter>
+      </defs>
+    </svg>
 
     <!-- Particles Background -->
     <div class="particles" id="particles"></div>
@@ -146,37 +155,80 @@
               <div class="lanyard" id="lanyard" aria-hidden="true">
                 <svg class="lanyard-svg" viewBox="0 0 200 120" preserveAspectRatio="xMidYMin meet">
                   <defs>
-                    <linearGradient id="lanyardGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stop-color="#1a1a2e"/>
-                      <stop offset="50%" stop-color="#2d2d44"/>
-                      <stop offset="100%" stop-color="#1a1a2e"/>
+                    <linearGradient id="strapBase" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#14142a"/>
+                      <stop offset="50%" stop-color="#1e1e38"/>
+                      <stop offset="100%" stop-color="#14142a"/>
                     </linearGradient>
-                    <linearGradient id="lanyardShine" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+                    <linearGradient id="strapHi" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="rgba(255,255,255,0.22)"/>
                       <stop offset="50%" stop-color="rgba(255,255,255,0.02)"/>
-                      <stop offset="100%" stop-color="rgba(255,255,255,0.08)"/>
+                      <stop offset="100%" stop-color="rgba(255,255,255,0.12)"/>
                     </linearGradient>
-                    <filter id="lanyardShadow">
-                      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.4)"/>
-                    </filter>
+                    <linearGradient id="metalBody" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#3a3a55"/>
+                      <stop offset="40%" stop-color="#28283e"/>
+                      <stop offset="100%" stop-color="#1c1c30"/>
+                    </linearGradient>
+                    <linearGradient id="metalEdge" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="rgba(255,255,255,0.3)"/>
+                      <stop offset="100%" stop-color="rgba(255,255,255,0.05)"/>
+                    </linearGradient>
+                    <linearGradient id="crimpShine" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>
+                      <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
+                    </linearGradient>
                   </defs>
-                  <!-- Left strap -->
-                  <path id="strapL" d="M30,0 Q30,50 80,80" fill="none" stroke="url(#lanyardGrad)" stroke-width="10" stroke-linecap="round" filter="url(#lanyardShadow)"/>
-                  <path d="M30,0 Q30,50 80,80" fill="none" stroke="url(#lanyardShine)" stroke-width="4" stroke-linecap="round"/>
-                  <!-- Right strap -->
-                  <path id="strapR" d="M170,0 Q170,50 120,80" fill="none" stroke="url(#lanyardGrad)" stroke-width="10" stroke-linecap="round" filter="url(#lanyardShadow)"/>
-                  <path d="M170,0 Q170,50 120,80" fill="none" stroke="url(#lanyardShine)" stroke-width="4" stroke-linecap="round"/>
-                  <!-- Metal clip -->
-                  <rect x="82" y="74" width="36" height="16" rx="3" fill="#1a1a2e" stroke="#00f0ff" stroke-width="0.8" opacity="0.9"/>
-                  <rect x="86" y="77" width="28" height="10" rx="2" fill="none" stroke="rgba(0,240,255,0.3)" stroke-width="0.5"/>
-                  <line x1="84" y1="76" x2="116" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
-                  <!-- Clip ring -->
-                  <circle cx="100" cy="82" r="3" fill="none" stroke="#00f0ff" stroke-width="0.6" opacity="0.5"/>
+
+                  <!-- LEFT STRAP -->
+                  <path d="M42,0 C42,32 72,62 94,84" fill="none" stroke="#08081a" stroke-width="17" stroke-linecap="round" opacity="0.35"/>
+                  <path d="M42,0 C42,32 72,62 94,84" fill="none" stroke="url(#strapBase)" stroke-width="14" stroke-linecap="round"/>
+                  <path d="M42,0 C42,32 72,62 94,84" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-linecap="round"/>
+                  <path d="M42,0 C42,32 72,62 94,84" fill="none" stroke="url(#strapHi)" stroke-width="6" stroke-linecap="round"/>
+                  <path d="M36,0 C36,30 66,60 88,82" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="0.5" stroke-linecap="round"/>
+                  <path d="M48,0 C48,34 78,64 100,86" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="0.5" stroke-linecap="round"/>
+
+                  <!-- RIGHT STRAP -->
+                  <path d="M158,0 C158,32 128,62 106,84" fill="none" stroke="#08081a" stroke-width="17" stroke-linecap="round" opacity="0.35"/>
+                  <path d="M158,0 C158,32 128,62 106,84" fill="none" stroke="url(#strapBase)" stroke-width="14" stroke-linecap="round"/>
+                  <path d="M158,0 C158,32 128,62 106,84" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-linecap="round"/>
+                  <path d="M158,0 C158,32 128,62 106,84" fill="none" stroke="url(#strapHi)" stroke-width="6" stroke-linecap="round"/>
+                  <path d="M152,0 C152,30 122,60 100,82" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="0.5" stroke-linecap="round"/>
+                  <path d="M164,0 C164,34 134,64 112,86" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="0.5" stroke-linecap="round"/>
+
+                  <!-- METAL CRIMP CONNECTOR -->
+                  <rect x="92" y="80" width="16" height="8" rx="2" fill="url(#metalBody)" stroke="rgba(0,240,255,0.2)" stroke-width="0.5"/>
+                  <rect x="93" y="81" width="14" height="2.5" rx="1" fill="url(#crimpShine)"/>
+                  <line x1="96" y1="83" x2="96" y2="87" stroke="rgba(0,240,255,0.12)" stroke-width="0.3"/>
+                  <line x1="100" y1="83" x2="100" y2="87" stroke="rgba(0,240,255,0.12)" stroke-width="0.3"/>
+                  <line x1="104" y1="83" x2="104" y2="87" stroke="rgba(0,240,255,0.12)" stroke-width="0.3"/>
+
+                  <!-- BULLDOG CLIP — TOP JAW -->
+                  <path d="M85,90 L115,90 L117,97 L83,97 Z" fill="url(#metalBody)" stroke="rgba(0,240,255,0.2)" stroke-width="0.5"/>
+                  <path d="M87,91.5 L113,91.5 L115,95.5 L85,95.5 Z" fill="none" stroke="url(#metalEdge)" stroke-width="0.3"/>
+
+                  <!-- BULLDOG CLIP — BOTTOM JAW -->
+                  <path d="M83,97 L117,97 L115,105 L85,105 Z" fill="#161630" stroke="rgba(0,240,255,0.18)" stroke-width="0.5"/>
+                  <path d="M85,98.5 L115,98.5 L113,103 L87,103 Z" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.3"/>
+
+                  <!-- HINGE / PIVOT -->
+                  <circle cx="100" cy="97" r="4.5" fill="#10102a" stroke="rgba(0,240,255,0.35)" stroke-width="0.8"/>
+                  <circle cx="100" cy="97" r="2.2" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.4"/>
+                  <circle cx="100" cy="97" r="0.9" fill="rgba(0,240,255,0.35)"/>
+
+                  <!-- CLIP TEETH -->
+                  <line x1="89" y1="105" x2="89" y2="108" stroke="rgba(0,240,255,0.22)" stroke-width="0.7" stroke-linecap="round"/>
+                  <line x1="94" y1="105" x2="94" y2="109" stroke="rgba(0,240,255,0.22)" stroke-width="0.7" stroke-linecap="round"/>
+                  <line x1="100" y1="105" x2="100" y2="109.5" stroke="rgba(0,240,255,0.25)" stroke-width="0.7" stroke-linecap="round"/>
+                  <line x1="106" y1="105" x2="106" y2="109" stroke="rgba(0,240,255,0.22)" stroke-width="0.7" stroke-linecap="round"/>
+                  <line x1="111" y1="105" x2="111" y2="108" stroke="rgba(0,240,255,0.22)" stroke-width="0.7" stroke-linecap="round"/>
                 </svg>
               </div>
 
               <!-- Card Scene (3D perspective) -->
               <div class="card-scene" id="cardScene" tabindex="0" role="button" aria-label="Interactive ID Card. Click to flip, drag to move.">
+                <!-- Ambient light reflection (always visible, shifts with tilt) -->
+                <div class="card-ambient-reflection" id="cardAmbientReflection" aria-hidden="true"></div>
                 <div class="id-card-3d" id="idCard3D">
 
                   <!-- FRONT FACE -->
@@ -189,6 +241,10 @@
                     <div class="card-shine" id="cardShine"></div>
                     <!-- Diagonal shine sweep -->
                     <div class="card-shine-sweep" id="cardShineSweep"></div>
+                    <!-- Noise texture -->
+                    <div class="card-noise" aria-hidden="true"></div>
+                    <!-- Interactive border glow -->
+                    <div class="card-border-glow" id="cardBorderGlow" aria-hidden="true"></div>
 
                     <!-- Abstract decorations -->
                     <div class="card-deco card-deco-1" aria-hidden="true"></div>
@@ -277,6 +333,14 @@
                     <div class="card-holo-overlay"></div>
                     <div class="card-shine"></div>
                     <div class="back-pattern"></div>
+                    <div class="card-noise" aria-hidden="true"></div>
+
+                    <!-- Holographic security strip -->
+                    <div class="back-holo-strip" aria-hidden="true"></div>
+                    <!-- Magnetic stripe -->
+                    <div class="back-magnetic-stripe" aria-hidden="true"></div>
+                    <!-- UV overlay effect -->
+                    <div class="back-uv-overlay" aria-hidden="true"></div>
 
                     <div class="card-deco card-deco-1" aria-hidden="true"></div>
                     <div class="card-deco card-deco-2" aria-hidden="true"></div>
@@ -306,6 +370,13 @@
                   </div>
 
                 </div>
+              </div>
+
+              <!-- Ambient floor glow -->
+              <div class="card-ambient-glow" id="cardAmbientGlow" aria-hidden="true"></div>
+              <!-- Card reflection on floor -->
+              <div class="card-reflection" id="cardReflection" aria-hidden="true">
+                <div class="card-reflection-inner"></div>
               </div>
 
               <!-- Tap hint -->
@@ -532,32 +603,6 @@
     <footer class="py-6 sm:py-8 text-center text-secondary text-xs sm:text-sm font-mono px-4">
       <p>&copy; 2026 <span class="text-neon-cyan">KHOIRONI HIDAYAT</span>. All rights reserved.</p>
     </footer>
-
-    <!-- Bottom Navigation (Mobile) -->
-    <nav class="bottom-nav lg:hidden" id="bottom-nav">
-      <div class="flex justify-around items-center max-w-lg mx-auto">
-        <a href="#home" class="bottom-nav-item active" data-section="home">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-          <span>Home</span>
-        </a>
-        <a href="#about" class="bottom-nav-item" data-section="about">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-          <span>About</span>
-        </a>
-        <a href="#portfolio" class="bottom-nav-item" data-section="portfolio">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-          <span>Project</span>
-        </a>
-        <a href="#clients" class="bottom-nav-item" data-section="clients">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-          <span>Clients</span>
-        </a>
-        <a href="#contact" class="bottom-nav-item" data-section="contact">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-          <span>Contact</span>
-        </a>
-      </div>
-    </nav>
 
     <script src=".vscode/js/script.js"></script>
   </body>

@@ -5,10 +5,12 @@ const html = document.documentElement;
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme !== "light") {
   html.classList.add("dark");
+  document.body.classList.add("dark");
 }
 
 function toggleTheme() {
   html.classList.toggle("dark");
+  document.body.classList.toggle("dark");
   const isDark = html.classList.contains("dark");
   localStorage.setItem("theme", isDark ? "dark" : "light");
 }
@@ -27,7 +29,6 @@ window.onscroll = function () {
     cpNavbar.classList.remove("scrolled");
   }
 
-  updateBottomNavActive();
   updateCpNavActive();
 };
 
@@ -75,29 +76,6 @@ cpNav.querySelectorAll(".cp-nav-item").forEach((link) => {
     }
   });
 });
-
-// ===== BOTTOM NAV ACTIVE STATE =====
-function updateBottomNavActive() {
-  const sections = document.querySelectorAll("section[id]");
-  const bottomNavItems = document.querySelectorAll(".bottom-nav-item");
-
-  let currentSection = "";
-
-  sections.forEach((section) => {
-    const sectionTop = section.offsetTop - 200;
-    const sectionHeight = section.clientHeight;
-    if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
-      currentSection = section.getAttribute("id");
-    }
-  });
-
-  bottomNavItems.forEach((item) => {
-    item.classList.remove("active");
-    if (item.getAttribute("data-section") === currentSection) {
-      item.classList.add("active");
-    }
-  });
-}
 
 // ===== CYBERPUNK NAV ACTIVE LINK =====
 function updateCpNavActive() {
@@ -171,7 +149,8 @@ function initScrollReveal() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add("visible");
-        revealObserver.unobserve(entry.target);
+      } else {
+        entry.target.classList.remove("visible");
       }
     });
   }, {
@@ -188,7 +167,8 @@ function initScrollReveal() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add("visible");
-        dividerObserver.unobserve(entry.target);
+      } else {
+        entry.target.classList.remove("visible");
       }
     });
   }, {
@@ -380,18 +360,6 @@ const techObserver = new MutationObserver(() => {
 });
 techObserver.observe(html, { attributes: true, attributeFilter: ["class"] });
 
-// ===== SMOOTH SCROLL FOR BOTTOM NAV =====
-document.querySelectorAll('.bottom-nav-item').forEach(item => {
-  item.addEventListener('click', function(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('href');
-    const target = document.querySelector(targetId);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-});
-
 // ===== TYPING EFFECT FOR HERO =====
 function typeWriter(element, text, speed = 100) {
   let i = 0;
@@ -463,6 +431,9 @@ if (contactForm) {
   const tapHint = document.getElementById("tapHint");
   const cardPhoto = document.getElementById("cardPhoto");
   const photo = cardPhoto ? cardPhoto.querySelector("img") : null;
+  const ambientReflection = document.getElementById("cardAmbientReflection");
+  const ambientGlow = document.getElementById("cardAmbientGlow");
+  const borderGlow = document.getElementById("cardBorderGlow");
 
   if (!card3d || !scene || !wrapper) return;
 
@@ -579,6 +550,21 @@ if (contactForm) {
     // Lanyard deformation
     applyLanyardDeform(finalRotateX, finalRotateY);
 
+    // Ambient light reflection
+    applyAmbientReflection(finalRotateX, finalRotateY);
+
+    // Dynamic edge highlights
+    applyEdgeHighlight(finalRotateX, finalRotateY);
+
+    // Ambient floor glow
+    applyAmbientGlow(finalRotateX, finalRotateY);
+
+    // Holographic angle
+    applyHolographicAngle(finalRotateX, finalRotateY);
+
+    // Interactive border glow
+    applyBorderGlow();
+
     rafId = requestAnimationFrame(animate);
   }
 
@@ -650,6 +636,71 @@ if (contactForm) {
     lanyard.style.transform = `translateX(calc(-50% + ${deformX}px)) translateY(${deformY}px)`;
   }
 
+  // --- Ambient light reflection ---
+  function applyAmbientReflection(rx, ry) {
+    if (!ambientReflection) return;
+    const x = 50 + ry * 1.5;
+    const y = 30 + rx * 1.2;
+    ambientReflection.style.setProperty('--ambient-x', x + '%');
+    ambientReflection.style.setProperty('--ambient-y', y + '%');
+  }
+
+  // --- Dynamic edge highlights ---
+  function applyEdgeHighlight(rx, ry) {
+    const edges = card3d.querySelectorAll('.card-edge');
+    edges.forEach(edge => {
+      let intensity = 0.5;
+      if (edge.classList.contains('card-edge-top')) {
+        intensity = Math.max(0, 0.5 - rx * 0.02);
+      } else if (edge.classList.contains('card-edge-bottom')) {
+        intensity = Math.max(0, 0.5 + rx * 0.02);
+      } else if (edge.classList.contains('card-edge-left')) {
+        intensity = Math.max(0, 0.5 - ry * 0.02);
+      } else if (edge.classList.contains('card-edge-right')) {
+        intensity = Math.max(0, 0.5 + ry * 0.02);
+      }
+      edge.style.setProperty('--edge-intensity', intensity);
+    });
+  }
+
+  // --- Ambient floor glow ---
+  function applyAmbientGlow(rx, ry) {
+    if (!ambientGlow) return;
+    const offsetX = ry * 1.5;
+    const offsetY = Math.abs(rx) * 0.5;
+    const intensity = Math.min(1, (Math.abs(rx) + Math.abs(ry)) * 0.02);
+    ambientGlow.style.transform = `translateX(calc(-50% + ${offsetX}px)) translateY(${offsetY}px)`;
+    ambientGlow.style.opacity = isHovering ? 0.4 + intensity * 0.6 : 0;
+  }
+
+  // --- Holographic angle ---
+  function applyHolographicAngle(rx, ry) {
+    const holoOverlays = card3d.querySelectorAll('.card-holo-overlay');
+    const angle = 125 + ry * 2;
+    holoOverlays.forEach(overlay => {
+      overlay.style.setProperty('--holo-angle', angle + 'deg');
+    });
+  }
+
+  // --- Interactive border glow ---
+  function applyBorderGlow() {
+    if (!borderGlow || !isHovering) {
+      if (borderGlow) borderGlow.style.opacity = '0';
+      return;
+    }
+    borderGlow.style.opacity = '1';
+  }
+
+  // Update border glow position on mousemove
+  function updateBorderGlowPosition(x, y) {
+    if (!borderGlow || !scene) return;
+    const rect = scene.getBoundingClientRect();
+    const glowX = ((x - rect.left) / rect.width) * 100;
+    const glowY = ((y - rect.top) / rect.height) * 100;
+    borderGlow.style.setProperty('--glow-x', glowX + '%');
+    borderGlow.style.setProperty('--glow-y', glowY + '%');
+  }
+
   // --- Mouse events ---
   scene.addEventListener("mouseenter", function () {
     if (isDragging) return;
@@ -677,6 +728,9 @@ if (contactForm) {
       shine.style.setProperty("--shine-x", shineX + "%");
       shine.style.setProperty("--shine-y", shineY + "%");
     }
+
+    // Border glow position
+    updateBorderGlowPosition(e.clientX, e.clientY);
   });
 
   scene.addEventListener("mouseleave", function () {
@@ -1093,7 +1147,7 @@ if (contactForm) {
     requestAnimationFrame(tick);
   }
 
-  var hoverTargets = 'a, button, [role="button"], input, textarea, select, .cp-nav-item, .bottom-nav-item, .portfolio-card, .btn-neon, .cp-theme-toggle, .cp-hamburger';
+  var hoverTargets = 'a, button, [role="button"], input, textarea, select, .cp-nav-item, .portfolio-card, .btn-neon, .cp-theme-toggle, .cp-hamburger';
 
   document.addEventListener('mousemove', function(e) {
     mx = e.clientX;
